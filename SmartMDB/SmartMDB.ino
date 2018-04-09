@@ -29,8 +29,14 @@ int ledN7 = 4; //dom
 
 int buzzer = 3;
 
+int button1 = 36;
 int button2 = 2;
-int button1 = 1;
+
+int flagA = 0;
+int auxD = 0;
+
+int bState1 = 0;
+int bState2 = 0;
 
 struct alarme
 {
@@ -62,6 +68,9 @@ void setup()
   pinMode(ledN5, OUTPUT);
   pinMode(ledN6, OUTPUT);
   pinMode(ledN7, OUTPUT);
+
+  pinMode(button1, INPUT);
+  pinMode(button2, INPUT);
 
   pinMode(buzzer, OUTPUT);
 }
@@ -123,76 +132,31 @@ void loop()
   digitalWrite(ledN7, LOW);
 
   //Vetor dos alarmes
-  Alarme a[14];
+  Alarme m[7];
+  Alarme n[7];
 
 
+  //
+  //  while (Serial.available() == 0);
+  //
+  //  int dia = Serial.parseInt(); //read int or parseFloat for ..float...
+  //
+  //  while (Serial.available() == 0);
+  //  int hora = Serial.parseInt();
+  //
+  //  while (Serial.available() == 0);
+  //  int minuto = Serial.parseInt();
+  //
+  //  if (hora > 12) {
+  //    n[dia - 1].diaS = dia;
+  //    n[dia - 1].hora = hora;
+  //    n[dia - 1].minuto = minuto;
+  //  } else {
+  //    m[dia - 1].diaS = dia;
+  //    m[dia - 1].hora = hora;
+  //    m[dia - 1].minuto = minuto;
+  //  }
 
-  while (Serial.available() == 0);
-
-  int dia = Serial.parseInt(); //read int or parseFloat for ..float...
-
-  while (Serial.available() == 0);
-  int hora = Serial.parseInt();
-
-  while (Serial.available() == 0);
-  int minuto = Serial.parseInt();
-
-  switch (dia)
-  {
-    case 1:
-      if (hora < 12) {
-        a[12].diaS = dia;
-        a[12].hora = hora;
-        a[12].minuto = minuto;
-      } else if (hora > 11) {
-        a[13].diaS = dia;
-        a[13].hora = hora;
-        a[13].minuto = minuto;
-      }
-      break;
-    case 2:
-      if (hora < 12) {
-        digitalWrite(ledM1, HIGH);
-      } else if (hora > 11) {
-        digitalWrite(ledN1, HIGH);
-      }
-      break;
-    case 3:
-      if (hora < 12) {
-        digitalWrite(ledM2, HIGH);
-      } else if (hora > 11) {
-        digitalWrite(ledN2, HIGH);
-      }
-      break;
-    case 4:
-      if (hora < 12) {
-        digitalWrite(ledM3, HIGH);
-      } else if (hora > 11) {
-        digitalWrite(ledN3, HIGH);
-      }
-      break;
-    case 5:
-      if (hora < 12) {
-        digitalWrite(ledM4, HIGH);
-      } else if (hora > 11) {
-        digitalWrite(ledN4, HIGH);
-      }
-      break;
-    case 6:
-      if (hora < 12) {
-        digitalWrite(ledM5, HIGH);
-      } else if (hora > 11) {
-        digitalWrite(ledN5, HIGH);
-      }
-      break;
-    case 7:
-      if (hora < 12) {
-        digitalWrite(ledM6, HIGH);
-      } else if (hora > 11) {
-        digitalWrite(ledN6, HIGH);
-      }
-      break;
-  }
   //  Serial.print(dia);
   //  Serial.print(" ");
   //  Serial.print(hora);
@@ -202,82 +166,158 @@ void loop()
 
 
 
-  //  //alarme segunda manha
-  //  a[0].diaS = 2;
-  //  a[0].hora = 10;
-  //  a[0].minuto = 30;
-  //
-  //  //alarme segunda noite
-  //  a[1].diaS = 2;
-  //  a[1].hora = 19;
-  //  a[1].minuto = 30;
-  //
-  //  //alarme terca manha
-  //  a[2].diaS = 3;
-  //  a[2].hora = 10;
-  //  a[2].minuto = 30;
-  //
-  //  //alarme terca noite
-  //  a[3].diaS = 3;
-  //  a[3].hora = 19;
-  //  a[3].minuto = 30;
-  //
-  //  //alarme quarta manha
-  //  a[4].diaS = 4;
-  //  a[4].hora = 10;
-  //  a[4].minuto = 30;
-  //
-  //  //alarme quarta noite
-  //  a[5].diaS = 4;
-  //  a[5].hora = 19;
-  //  a[5].minuto = 30;
-  //
-  //  //alarme quinta manha
-  //  a[6].diaS = 5;
-  //  a[6].hora = 10;
-  //  a[6].minuto = 30;
-  //
-  //  //alarme quinta noite
-  //  a[7].diaS = 5;
-  //  a[7].hora = 19;
-  //  a[7].minuto = 30;
-  //
-  //  //alarme sexta manha
-  //  a[8].diaS = 6;
-  //  a[8].hora = 10;
-  //  a[8].minuto = 30;
-  //
-  //  //alarme sexta noite
-  //  a[9].diaS = 6;
-  //  a[9].hora = 19;
-  //  a[9].minuto = 30;
-  //
-  //  //alarme sabado manha
-  //  a[10].diaS = 7;
-  //  a[10].hora = 10;
-  //  a[10].minuto = 30;
-  //
-  //  //alarme sabado noite
-  //  a[11].diaS = 7;
-  //  a[11].hora = 19;
-  //  a[11].minuto = 30;
-  //
-  //  //alarme domingo manha
-  //  a[12].diaS = 1;
-  //  a[12].hora = 10;
-  //  a[12].minuto = 30;
-  //
-  //  //alarme domingo noite
-  //  a[13].diaS = 1;
-  //  a[13].hora = 19;
-  //  a[13].minuto = 30;
-  //
 
+  //alarme domingo manha
+  m[0].diaS = 1;
+  m[0].hora = 10;
+  m[0].minuto = 30;
 
+  //alarme domingo noite
+  n[0].diaS = 1;
+  n[0].hora = 23;
+  n[0].minuto = 13;
 
-  if ((myRTC.dayofweek == a[0].diaS) && (myRTC.hours == a[0].hora) && (myRTC.minutes == a[0].minuto)) {
-    acendeLED(a[0].diaS, a[0].hora);
-    tone(buzzer, 262, 100);
+  //alarme segunda manha
+  m[1].diaS = 2;
+  m[1].hora = 10;
+  m[1].minuto = 50;
+
+  //alarme segunda noite
+  n[1].diaS = 2;
+  n[1].hora = 14;
+  n[1].minuto = 59;
+
+  //alarme terca manha
+  m[2].diaS = 3;
+  m[2].hora = 10;
+  m[2].minuto = 30;
+
+  //alarme terca noite
+  n[2].diaS = 3;
+  n[2].hora = 19;
+  n[2].minuto = 30;
+
+  //alarme quarta manha
+  m[3].diaS = 4;
+  m[3].hora = 10;
+  m[3].minuto = 30;
+
+  //alarme quarta noite
+  n[3].diaS = 4;
+  n[3].hora = 19;
+  n[3].minuto = 30;
+
+  //alarme quinta manha
+  m[4].diaS = 5;
+  m[4].hora = 10;
+  m[4].minuto = 30;
+
+  //alarme quinta noite
+  n[4].diaS = 5;
+  n[4].hora = 19;
+  n[4].minuto = 30;
+
+  //alarme sexta manha
+  m[5].diaS = 6;
+  m[5].hora = 10;
+  m[5].minuto = 30;
+
+  //alarme sexta noite
+  n[5].diaS = 6;
+  n[5].hora = 19;
+  n[5].minuto = 30;
+
+  //alarme sabado manha
+  m[6].diaS = 7;
+  m[6].hora = 10;
+  m[6].minuto = 30;
+
+  //alarme sabado noite
+  n[6].diaS = 7;
+  n[6].hora = 19;
+  n[6].minuto = 30;
+
+  auxD = myRTC.dayofweek - 1;
+  if (auxD < 0) {
+    auxD = 6;
+  }
+
+  if (myRTC.hours > 12) {
+    if ((myRTC.dayofweek == n[auxD].diaS) && (myRTC.hours == n[auxD].hora) && (myRTC.minutes == n[auxD].minuto) && (myRTC.seconds <= 5)) {
+      flagA = 1;
+    }
+  } else {
+    if ((myRTC.dayofweek == m[auxD].diaS) && (myRTC.hours == m[auxD].hora) && (myRTC.minutes == m[auxD].minuto) && (myRTC.seconds <= 5)) {
+      flagA = 1;
+    }
+  }
+
+  bState1 = digitalRead(button1);
+
+  if (flagA == 1) {
+    acendeLED(myRTC.dayofweek, myRTC.hours);
+    tone(buzzer, 262, 1000);
+    if (bState1 == HIGH) {
+      flagA = 0;
+    }
+  }
+
+  bState2 = digitalRead(button2);
+
+  if (bState1 == HIGH) {
+    if (myRTC.hours > 12) {
+      if (n[auxD].hora < myRTC.hours) {
+        acendeLED(n[auxD].diaS, n[auxD].hora);
+      } else if (n[auxD].hora == myRTC.hours) {
+        if (n[auxD].minuto < myRTC.minutes) {
+          acendeLED(n[auxD].diaS, n[auxD].hora);
+        }
+      } else if (n[auxD].hora > myRTC.hours) {
+        acendeLED(m[auxD].diaS, m[auxD].hora);
+      }
+    } else {
+      if (m[auxD].hora < myRTC.hours) {
+        acendeLED(m[auxD].diaS, m[auxD].hora);
+      } else if (m[auxD].hora == myRTC.hours) {
+        if (m[auxD].minuto < myRTC.minutes) {
+          acendeLED(m[auxD].diaS, m[auxD].hora);
+        }
+      } else if (m[auxD].hora > myRTC.hours) {
+        auxD -= 1;
+        if (auxD < 0) {
+          auxD = 6;
+        }
+        acendeLED(n[auxD].diaS, n[auxD].hora);
+      }
+    }
+  }
+
+  if (bState2 == HIGH) {
+    if (myRTC.hours > 12) {
+      if (n[auxD].hora > myRTC.hours) {
+        acendeLED(n[auxD].diaS, n[auxD].hora);
+      } else if (n[auxD].hora == myRTC.hours) {
+        if (n[auxD].minuto > myRTC.minutes) {
+          acendeLED(n[auxD].diaS, n[auxD].hora);
+        }
+      } else if (n[auxD].hora < myRTC.hours) {
+        auxD += 1;
+        if (auxD > 6) {
+          auxD = 0;
+        }
+        acendeLED(m[auxD].diaS, m[auxD].hora);
+      }
+    } else {
+      if (m[auxD].hora > myRTC.hours) {
+        acendeLED(m[auxD].diaS, m[auxD].hora);
+      } else if (m[auxD].hora == myRTC.hours) {
+        if (m[auxD].minuto > myRTC.minutes) {
+          acendeLED(m[auxD].diaS, m[auxD].hora);
+        }
+      } else if (m[auxD].hora < myRTC.hours) {
+        acendeLED(n[auxD].diaS, n[auxD].hora);
+      }
+    }
   }
 
 }
@@ -364,5 +404,6 @@ void acendeLED(int dia, int hora) {
       break;
   }
 }
+
 
 
