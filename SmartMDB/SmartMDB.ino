@@ -9,7 +9,8 @@
 // Determina os pinos ligados ao modulo
 // myRTC(clock, data, rst)
 virtuabotixRTC myRTC(6, 7, 8);
-//manha
+
+//LEDs de manha
 int ledM1 = 14; //seg
 int ledM2 = 15; //ter
 int ledM3 = 16; //qua
@@ -18,7 +19,7 @@ int ledM5 = 18; //sex
 int ledM6 = 19; //sab
 int ledM7 = 20; //dom
 
-//noite
+//LEDs de noite
 int ledN1 = 13; //seg
 int ledN2 = 12; //ter
 int ledN3 = 11; //qua
@@ -27,17 +28,22 @@ int ledN5 = 9;  //sex
 int ledN6 = 5;  //sab
 int ledN7 = 4; //dom
 
+//buzzer
 int buzzer = 3;
 
+//botoes
 int button1 = 36;
 int button2 = 2;
 
+//flags auxiliares
 int flagA = 0;
 int auxD = 0;
 
+//variaveis para armazenar o estado dos botoes
 int bState1 = 0;
 int bState2 = 0;
 
+//struct criada para salvar os alarmes
 struct alarme
 {
   int diaS;
@@ -53,6 +59,8 @@ void setup()
   // Apos setar as informacoes, comente a linha abaixo
   // (segundos, minutos, hora, dia da semana, dia do mes, mes, ano)
   //myRTC.setDS1302Time(30, 38, 15, 7, 7, 4, 2018);
+
+  //configurando os pinos dos LEDs
   pinMode(ledM1, OUTPUT);
   pinMode(ledM2, OUTPUT);
   pinMode(ledM3, OUTPUT);
@@ -60,7 +68,6 @@ void setup()
   pinMode(ledM5, OUTPUT);
   pinMode(ledM6, OUTPUT);
   pinMode(ledM7, OUTPUT);
-
   pinMode(ledN1, OUTPUT);
   pinMode(ledN2, OUTPUT);
   pinMode(ledN3, OUTPUT);
@@ -69,20 +76,22 @@ void setup()
   pinMode(ledN6, OUTPUT);
   pinMode(ledN7, OUTPUT);
 
+  //configurando os pinos dos botoes
   pinMode(button1, INPUT);
   pinMode(button2, INPUT);
 
+  //configurando o pino do buzzer
   pinMode(buzzer, OUTPUT);
 }
 
 void loop()
 {
-  // Le as informacoes do CI
+  // Le as informacoes do RTC
   myRTC.updateTime();
 
   // Imprime as informacoes no serial monitor
   Serial.print("Data : ");
-  // Chama a rotina que imprime o dia da semana
+  // Chama a funcao que imprime o dia da semana
   imprime_dia_da_semana(myRTC.dayofweek);
   Serial.print(", ");
   Serial.print(myRTC.dayofmonth);
@@ -115,6 +124,7 @@ void loop()
 
   delay(1000);
 
+  //desliga todos os LEDs
   digitalWrite(ledM1, LOW);
   digitalWrite(ledM2, LOW);
   digitalWrite(ledM3, LOW);
@@ -122,7 +132,6 @@ void loop()
   digitalWrite(ledM5, LOW);
   digitalWrite(ledM6, LOW);
   digitalWrite(ledM7, LOW);
-
   digitalWrite(ledN1, LOW);
   digitalWrite(ledN2, LOW);
   digitalWrite(ledN3, LOW);
@@ -131,120 +140,90 @@ void loop()
   digitalWrite(ledN6, LOW);
   digitalWrite(ledN7, LOW);
 
-  //Vetor dos alarmes
+  //Vetores dos alarmes
   Alarme m[7];
   Alarme n[7];
 
-
-  //
-  //  while (Serial.available() == 0);
-  //
-  //  int dia = Serial.parseInt(); //read int or parseFloat for ..float...
-  //
-  //  while (Serial.available() == 0);
-  //  int hora = Serial.parseInt();
-  //
-  //  while (Serial.available() == 0);
-  //  int minuto = Serial.parseInt();
-  //
-  //  if (hora > 12) {
-  //    n[dia - 1].diaS = dia;
-  //    n[dia - 1].hora = hora;
-  //    n[dia - 1].minuto = minuto;
-  //  } else {
-  //    m[dia - 1].diaS = dia;
-  //    m[dia - 1].hora = hora;
-  //    m[dia - 1].minuto = minuto;
-  //  }
-
-  //  Serial.print(dia);
-  //  Serial.print(" ");
-  //  Serial.print(hora);
-  //  Serial.print(" ");
-  //  Serial.println(minuto);
-  //
-
-
-
-
-  //alarme domingo manha
+  //alarme domingo de manha
   m[0].diaS = 1;
   m[0].hora = 10;
   m[0].minuto = 30;
 
-  //alarme domingo noite
+  //alarme domingo de noite
   n[0].diaS = 1;
   n[0].hora = 23;
   n[0].minuto = 13;
 
-  //alarme segunda manha
+  //alarme segunda de manha
   m[1].diaS = 2;
   m[1].hora = 10;
   m[1].minuto = 50;
 
-  //alarme segunda noite
+  //alarme segunda de noite
   n[1].diaS = 2;
-  n[1].hora = 14;
+  n[1].hora = 22;
   n[1].minuto = 59;
 
-  //alarme terca manha
+  //alarme terca de manha
   m[2].diaS = 3;
   m[2].hora = 10;
   m[2].minuto = 30;
 
-  //alarme terca noite
+  //alarme terca de noite
   n[2].diaS = 3;
   n[2].hora = 19;
   n[2].minuto = 30;
 
-  //alarme quarta manha
+  //alarme quarta de manha
   m[3].diaS = 4;
   m[3].hora = 10;
   m[3].minuto = 30;
 
-  //alarme quarta noite
+  //alarme quarta de noite
   n[3].diaS = 4;
   n[3].hora = 19;
   n[3].minuto = 30;
 
-  //alarme quinta manha
+  //alarme quinta de manha
   m[4].diaS = 5;
   m[4].hora = 10;
   m[4].minuto = 30;
 
-  //alarme quinta noite
+  //alarme quinta de noite
   n[4].diaS = 5;
   n[4].hora = 19;
   n[4].minuto = 30;
 
-  //alarme sexta manha
+  //alarme sexta de manha
   m[5].diaS = 6;
   m[5].hora = 10;
   m[5].minuto = 30;
 
-  //alarme sexta noite
+  //alarme sexta de noite
   n[5].diaS = 6;
   n[5].hora = 19;
   n[5].minuto = 30;
 
-  //alarme sabado manha
+  //alarme sabado de manha
   m[6].diaS = 7;
   m[6].hora = 10;
   m[6].minuto = 30;
 
-  //alarme sabado noite
+  //alarme sabado de noite
   n[6].diaS = 7;
   n[6].hora = 19;
   n[6].minuto = 30;
 
+  //variavel auxiliar para controle dos vetores
   auxD = myRTC.dayofweek - 1;
   if (auxD < 0) {
     auxD = 6;
   }
 
+  //verifica se algum alarme deve ser acionado
   if (myRTC.hours > 12) {
     if ((myRTC.dayofweek == n[auxD].diaS) && (myRTC.hours == n[auxD].hora) && (myRTC.minutes == n[auxD].minuto) && (myRTC.seconds <= 5)) {
-      flagA = 1;
+      flagA = 1; //flag indicando que um alarme deve ser acionado
     }
   } else {
     if ((myRTC.dayofweek == m[auxD].diaS) && (myRTC.hours == m[auxD].hora) && (myRTC.minutes == m[auxD].minuto) && (myRTC.seconds <= 5)) {
@@ -252,18 +231,23 @@ void loop()
     }
   }
 
+
+  //le o estado do botao 1
   bState1 = digitalRead(button1);
 
+  //acende o led do respectivo remedio de liga o alarme
   if (flagA == 1) {
     acendeLED(myRTC.dayofweek, myRTC.hours);
     tone(buzzer, 262, 1000);
-    if (bState1 == HIGH) {
+    if (bState1 == HIGH) { //se o botao 1 for pressionado desliga o alarme 
       flagA = 0;
     }
   }
 
+  //le o estado do botao 2
   bState2 = digitalRead(button2);
 
+  //se o botao 1 for pressionado acende o LED do ultimo remedio tomado
   if (bState1 == HIGH) {
     if (myRTC.hours > 12) {
       if (n[auxD].hora < myRTC.hours) {
@@ -292,6 +276,7 @@ void loop()
     }
   }
 
+  //se o botao 2 for pressionado acendo o LED do proximo remedio a ser tomado
   if (bState2 == HIGH) {
     if (myRTC.hours > 12) {
       if (n[auxD].hora > myRTC.hours) {
@@ -322,6 +307,7 @@ void loop()
 
 }
 
+//funcao para imprimir por extenso os dias da semana no monitor serial
 void imprime_dia_da_semana(int dia)
 {
   switch (dia)
@@ -350,6 +336,7 @@ void imprime_dia_da_semana(int dia)
   }
 }
 
+//funcao para acender o LED equivalente ao alarme tocado
 void acendeLED(int dia, int hora) {
   switch (dia)
   {
