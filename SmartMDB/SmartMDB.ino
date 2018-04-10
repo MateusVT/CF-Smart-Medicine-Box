@@ -239,7 +239,7 @@ void loop()
   if (flagA == 1) {
     acendeLED(myRTC.dayofweek, myRTC.hours);
     tone(buzzer, 262, 1000);
-    if (bState1 == HIGH) { //se o botao 1 for pressionado desliga o alarme 
+    if (bState1 == HIGH) { //se o botao 1 for pressionado desliga o alarme
       flagA = 0;
     }
   }
@@ -255,6 +255,8 @@ void loop()
       } else if (n[auxD].hora == myRTC.hours) {
         if (n[auxD].minuto < myRTC.minutes) {
           acendeLED(n[auxD].diaS, n[auxD].hora);
+        } else if (n[auxD].minuto >= myRTC.minutes) {
+          acendeLED(m[auxD].diaS, m[auxD].hora);
         }
       } else if (n[auxD].hora > myRTC.hours) {
         acendeLED(m[auxD].diaS, m[auxD].hora);
@@ -265,6 +267,13 @@ void loop()
       } else if (m[auxD].hora == myRTC.hours) {
         if (m[auxD].minuto < myRTC.minutes) {
           acendeLED(m[auxD].diaS, m[auxD].hora);
+        } else if (m[auxD].minuto >= myRTC.minutes) {
+          auxD -= 1;
+          if (auxD < 0) {
+            auxD = 6;
+          }
+          acendeLED(n[auxD].diaS, n[auxD].hora);
+
         }
       } else if (m[auxD].hora > myRTC.hours) {
         auxD -= 1;
@@ -284,6 +293,12 @@ void loop()
       } else if (n[auxD].hora == myRTC.hours) {
         if (n[auxD].minuto > myRTC.minutes) {
           acendeLED(n[auxD].diaS, n[auxD].hora);
+        } else if (n[auxD].minuto <= myRTC.minutes) {
+          auxD += 1;
+          if (auxD > 6) {
+            auxD = 0;
+          }
+          acendeLED(m[auxD].diaS, m[auxD].hora);
         }
       } else if (n[auxD].hora < myRTC.hours) {
         auxD += 1;
@@ -298,6 +313,8 @@ void loop()
       } else if (m[auxD].hora == myRTC.hours) {
         if (m[auxD].minuto > myRTC.minutes) {
           acendeLED(m[auxD].diaS, m[auxD].hora);
+        } else if (m[auxD].minuto <= myRTC.minutes) {
+          acendeLED(n[auxD].diaS, n[auxD].hora);
         }
       } else if (m[auxD].hora < myRTC.hours) {
         acendeLED(n[auxD].diaS, n[auxD].hora);
